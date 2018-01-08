@@ -1,0 +1,3381 @@
+{
+  "info": {
+    "name": "HCM Test Suite",
+    "_postman_id": "ee61ab2f-c8f6-a356-d697-92adaf820907",
+    "description": "# HCM Test Suite\r\n\r\nHCM Test Suite is a Testing framework based on Postman syntax with several helpers like chai js, Postman BDD, Lodash and some task execution tools like newman(In order to integrate with jenkins) and npm, all these tools works togheter in order to validate service responses and bussiness requirements.\r\n\r\n----\r\n## What do i need to know before contributing content in this collection?\r\nsee [Postman](https://www.getpostman.com/)\r\n> Postman is a powerful HTTP client for testing web services.\r\n\r\nsee [Newman](https://github.com/postmanlabs/newman)\r\n> Newman is a command-line collection runner for Postman\r\n\r\nsee [Javascript basics](https://www.javascript.com/learn/javascript/strings)\r\n> Javascript is the language that we will be using for test designing and execution.\r\n\r\nsee [JSON](http://www.json.org/)\r\n> JSON is short for JavaScript Object Notation, and is a way to store information in an organized, easy-to-access manner. In a nutshell, it gives us a human-readable collection of data that we can access in a really logical manner.\r\n\r\nsee [JSON Schema](https://spacetelescope.github.io/understanding-json-schema/index.html)\r\n> JSON Schema specifies a JSON-based format to define the structure of JSON data for validation, documentation, and interaction control.\r\n\r\nsee [Chai JS](http://chaijs.com/)\r\n> Chai is a BDD / TDD assertion library for node and the browser that can be delightfully paired with any javascript testing framework.\r\n\r\nsee [Node JS](https://nodejs.org/es/)\r\n> Node.js is a platform built on Chrome's JavaScript runtime for easily building fast and scalable network applications.\r\n\r\n## Useful links\r\nsee [Using BDD style on postman tests](https://www.npmjs.com/package/postman-bdd)\r\n\r\nsee [JSON Schema generator](https://jsonschema.net/#/editor)\r\n\r\nsee [Markdown in API Documentation](https://help.github.com/articles/basic-writing-and-formatting-syntax/)\r\n\r\nsee [Markdown Live Preview Tool](http://markdownlivepreview.com/)\r\n\r\n## Installing\r\n\r\n```javascript\r\nvar oldUnload = window.onbeforeunload;\r\nwindow.onbeforeunload = function() {\r\n    saveCoverage();\r\n    if (oldUnload) {\r\n        return oldUnload.apply(this, arguments);\r\n    }\r\n};\r\n```",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+  },
+  "item": [
+    {
+      "_postman_id": "c742315b-f32a-b968-e857-38b2932980a0",
+      "name": "Set-up",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "c0f4fe4a-f591-9766-9072-91e1cbc102d9",
+          "name": "Common Tests",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "8a7f350e-c2c3-0806-6733-5c2a13e880bd",
+              "name": "Install BDD",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "d823084b-67d3-407d-867c-4d262531ee11",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/* Check for http://chaijs.com/",
+                      "    https://www.npmjs.com/package/postman-bdd",
+                      "    http://chaijs.com/plugins/chai-http/#assertions",
+                      "    http://chaijs.com/api/bdd/",
+                      "    https://github.com/chaijs/chai-http#assertions",
+                      "    https://www.npmjs.com/package/newman",
+                      "*/",
+                      "// \"install\" Postman BDD ",
+                      "postman.setGlobalVariable('postmanBDD', responseBody);",
+                      "pm.test(\"Status code is 200\", function () {",
+                      "    pm.response.to.have.status(200);",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": "http://bigstickcarpet.com/postman-bdd/dist/postman-bdd.js",
+                "description": "# Setting DBB Syntaxis\r\n\r\n>This request downloads [Postman BDD](https://www.npmjs.com/package/postman-bdd) and then \"installs\" it by setting in to a global variable called `postmanBDD`\r\n\r\nThis variable can be used by putting the code `eval(globals.postmanBDD);` on the test script section in order to use [chai js](http://chaijs.com/api/bdd/) functionality."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "43581c65-87ae-f2cd-28fe-6a81a6a01b4c",
+              "name": "Set Common Tests",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "7454eecc-8da7-4adc-921b-1aa71b4f83bc",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "86593820-e496-4426-ba1f-79a864279220",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD",
+                      " eval(globals.postmanBDD);",
+                      "",
+                      "/*###########################Tests#########################*/",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        General Tests collection.",
+                      " * DESCRIPTION:",
+                      " *              Contains common test that can be executed on almost every request.",
+                      " * ",
+                      " * HOW TO:      In order to execute common tests on a request, this function must be called on the test section at postman as follows.",
+                      " *              eval(globals.commonTests)();",
+                      " */",
+                      "try{",
+                      "        // Save common tests in a global variable",
+                      "        postman.setGlobalVariable(\"commonTests\", () => {",
+                      "        // If request uses a pre request script, response must contains sent parameter.",
+                      "        // Request must contains the access token included.",
+                      "            describe(\"Common Tests\", () => {",
+                      "                it(\"Response must be a Json Object\", function(){",
+                      "                    expect(response, \"Response is not an application/json object type, instead it is \"",
+                      "                            + response.type).to.be.json;",
+                      "                ",
+                      "                    expect(response.headers[\"content-type\"], \"Header content-type does not contain a valid content,\" +",
+                      "                            \" instead it is \" + response.headers[\"content-type\"]).to.have.oneOf([\"application/json\",",
+                      "                            \"application/json;charset=UTF-8\"]);",
+                      "                });",
+                      "                ",
+                      "                //Validates the response, by standard must be a string.",
+                      "                it('should contain the un-parsed JSON text', () => {",
+                      "                    response.text.should.be.a('string');",
+                      "                });",
+                      "                        ",
+                      "                it('should contain headers oject and not empty', () => {",
+                      "                    response.headers.should.be.an('object').and.not.empty;",
+                      "                });",
+                      "                               ",
+                      "                it(\"Response is not a 500 internal error\", function(){",
+                      "                    response.should.not.have.status(500);",
+                      "                });",
+                      "            });",
+                      "        });",
+                      "    }catch(e){",
+                      "        console.log(e.error);",
+                      "        console.log(response);",
+                      "    }",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Validates requests without access_token included.",
+                      " * DESCRIPTION:",
+                      " *              Validates that every test which require authentication responds with 401 status when NO ACCESS TOKEN IS GIVEN,",
+                      " *              this means that request can't attach the access token on the headers section.",
+                      " * ",
+                      " * HOW TO:      This function must be called on the test section at postman as follows.",
+                      " *              eval(globals.checkUserSession)();",
+                      " */",
+                      "try{",
+                      "        postman.setGlobalVariable(\"checkUserSession\", () => {",
+                      "            describe(\"Validate an unauthorized request\", function(){",
+                      "                it(\"Response body should contain a status 401\", function(){",
+                      "                    response.should.have.status(401);",
+                      "                    expect(response.body.error).to.equals(\"unauthorized\");",
+                      "                });",
+                      "            });",
+                      "        });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}",
+                      "",
+                      " /**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Validates invalid access_token values.",
+                      " * DESCRIPTION:",
+                      " *              Validates that every test which require authentication responds with 401 status when GIVEN ACCESS TOKEN IS INVALID,",
+                      " *              this means that access token given on the headers section it's expired or has an invalid format.",
+                      " * ",
+                      " * HOW TO:      This function must be called on the test section at postman as follows.",
+                      " *              eval(globals.checkUserToken)();",
+                      " */   ",
+                      "try{",
+                      "        postman.setGlobalVariable(\"checkUserToken\", () => {",
+                      "            describe(\"Validate an invalid access token\", function(){",
+                      "                it(\"should contain a status 401\", function(){",
+                      "                    response.should.have.status(401);",
+                      "                    expect(response.body.error).to.equals(\"invalid_token\");",
+                      "                });",
+                      "            });",
+                      "        });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}",
+                      "",
+                      " /**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Request new access_token.",
+                      " * DESCRIPTION:",
+                      " *              Request a new access_token when is called, takes the environment variables: userName and password, this function is",
+                      " *              usually executed when a forced end session is required.",
+                      " * ",
+                      " * HOW TO:      This function must be called on the test section at postman as follows.",
+                      " *              ",
+                      " *              eval(globals.requestAccessAgain)();",
+                      " * ",
+                      " *              If it is needed, mentioned environment variables can be re-assigned at pre-request tab.",
+                      " *              eval(globals.requestAccessAgain)();",
+                      " */      ",
+                      "try{",
+                      "        postman.setGlobalVariable(\"requestAccessAgain\", () => {",
+                      "            describe(\"Generate access token\", function(){",
+                      "                it(\"should generate access_token again\", function(){",
+                      "                    // See how to use \"access_token_request\" assignment when requiring a new access_token.",
+                      "                    pm.sendRequest(pm.globals.get(\"access_token_request\"), function(err, res){",
+                      "                        if (err) { console.log(err); }",
+                      "                        pm.test('response should be okay', function () {",
+                      "                            pm.expect(err).to.equal(null);",
+                      "                            pm.expect(res).to.have.property('code', 200);",
+                      "                            pm.expect(res).to.have.property('status', 'OK');",
+                      "                            // If success, environment variable will be setted again with the new access_token.",
+                      "                            pm.environment.set(\"access_token\", \"Bearer \" + res.json().access_token);",
+                      "                        });",
+                      "                    });",
+                      "                });",
+                      "            });",
+                      "        });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "} "
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "HEAD",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "http://www.google.com.mx",
+                "description": "> `Common tests:`This request is empty and was made for setting common tests in to a global variable in order to reuse code."
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "f1e06e6f-9190-2aa5-5060-e86e87d21af4",
+          "name": "Utils",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "b639f293-c0de-2ef1-bbde-b269ea9dfc38",
+              "name": "Util functions and variables",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c9834c7d-e6e6-46a8-94f3-c6397fd08474",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Define request structure for require a new access_token.",
+                      " * DESCRIPTION:",
+                      " *              Set the request structure for requiring a new access_token, this function will",
+                      " *              take the actual values of the environment variables(\"userName\" && \"password\")",
+                      " * ",
+                      " * HOW TO:      This variable is used by the requestAccessAgain() function, so there is no need",
+                      " *              of modify at least that the api path changes.",
+                      " * ",
+                      " */",
+                      " pm.globals.set(\"access_token_request\", {",
+                      "    url: pm.environment.get(\"url\") + \"/oauth/token?username=\"",
+                      "    + pm.environment.get(\"userName\") + \"&password=\" + pm.environment.get(\"password\") ",
+                      "    + \"&grant_type=password&client_id=client&client_secret=secret\",",
+                      "    method: \"POST\",",
+                      "    header: {",
+                      "\t\t\"content-type\": \"application/json\",",
+                      "    }",
+                      "});",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Clear environment variable values.",
+                      " * DESCRIPTION:",
+                      " *              Clear postman's environment variables except the environment url, default userName and password.",
+                      " * ",
+                      " * HOW TO:      This function is used to clear all unnecessary environment variables in one execution,",
+                      " *              can be called on any section as follows.",
+                      " *              eval(environment.purgeTestValues)();",
+                      " * ",
+                      " */",
+                      "try{",
+                      "    postman.setGlobalVariable(\"purgeTestValues\", () => {",
+                      "        for(environmentVariable in environment){",
+                      "            if(environmentVariable != \"url\" && environmentVariable != \"userName\" && environmentVariable != \"password\"){",
+                      "                console.log(\"environment: \" + environmentVariable);",
+                      "                pm.environment.unset(environmentVariable);",
+                      "            }",
+                      "        } ",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Clear global variable values.",
+                      " * DESCRIPTION:",
+                      " *              Clear postman's global variables.",
+                      " * ",
+                      " * HOW TO:      This function is used to clear all global variables in one execution,",
+                      " *              can be called on any section as follows.",
+                      " *              eval(globals.purgeTestValues)();",
+                      " * ",
+                      " */",
+                      "try{",
+                      "    postman.setGlobalVariable(\"purgeGlobals\", () => {",
+                      "        for(globalVariable in globals){",
+                      "            pm.globals.unset(globalVariable);",
+                      "        } ",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Clear environment credentials values.",
+                      " * DESCRIPTION:",
+                      " *              Clear used environment variables used for storing user account credentials.",
+                      " * ",
+                      " * HOW TO:      Can be called on any section as follows.",
+                      " *              eval(globals.clearUserAccountCredentials)();",
+                      " * ",
+                      " */",
+                      " try{",
+                      "    postman.setGlobalVariable(\"clearUserAccountCredentials\", () => {",
+                      "        postman.clearEnvironmentVariable(\"userName\");",
+                      "        postman.clearEnvironmentVariable(\"password\");  ",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "HEAD",
+                "header": [],
+                "body": {},
+                "url": "http://www.google.com.mx",
+                "description": "> `General purpose:`To centralize util functions and variable implementations."
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "3ab5e6a4-9dec-5b91-721c-54ae896fd339",
+          "name": "General API Schemas",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "6720a9a1-6cab-7c10-e734-6c325b6a4ca7",
+              "name": "Set General API Schemas",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "0b41f787-e5db-4afb-91ce-a24439cc14dc",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Define json schema for expressing errors.",
+                      " * DESCRIPTION:",
+                      " *              Set general error message structure when a field is missing or have any error.",
+                      " * ",
+                      " * HOW TO:      This function must be called on the test section at postman as follows.",
+                      " *              eval(globals.errorsInSchema)();",
+                      " */",
+                      " pm.globals.set(\"errorsInSchema\", {",
+                      "  \"definitions\": {},",
+                      "  \"$schema\": \"http://json-schema.org/draft-06/schema#\",",
+                      "  \"$id\": \"http://example.com/example.json\",",
+                      "  \"type\": \"object\",",
+                      "  \"additionalProperties\": false,",
+                      "  \"properties\": {",
+                      "    \"title\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"status\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"timeStamp\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"exception\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"classError\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"methodError\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"errors\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"element_name\": {",
+                      "            \"type\": \"array\",",
+                      "            \"items\": {",
+                      "              \"type\": \"object\",",
+                      "              \"additionalProperties\": false,",
+                      "              \"properties\": {",
+                      "                \"code\": {",
+                      "                  \"type\": \"string\"",
+                      "                },",
+                      "                \"message\": {",
+                      "                  \"type\": \"string\"",
+                      "                }",
+                      "              }",
+                      "            }",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    }",
+                      "  }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "HEAD",
+                "header": [],
+                "body": {},
+                "url": "http://www.google.com.mx",
+                "description": "Contains the JSON schemas for general responses, like errors or validations that can be present on many services."
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "0f79740d-16f7-41c2-8b44-8e3bab7bc145",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "f0f97e16-b717-4261-a8f8-8642f9daa28f",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        }
+      ]
+    },
+    {
+      "_postman_id": "4a5c2e48-e40e-e060-8cd0-8b44011d23dd",
+      "name": "Session",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "3c992f2a-3a4f-f359-4625-20f7bd685653",
+          "name": "Session Set-up",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "bae97dee-4e85-89af-81a8-de02da1c83cc",
+              "name": "Session Set-up",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "7454eecc-8da7-4adc-921b-1aa71b4f83bc",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "13bd6397-f02c-49b2-af4b-df5754980d9d",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/*#########################Schemas#########################*/",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Schema for logged in service response.",
+                      " * DESCRIPTION:",
+                      " *              Do validates the response of logged in service according to defined json schema by analysis area.",
+                      " */   ",
+                      "pm.globals.set(\"loggedinSchema\", {",
+                      "  \"$schema\": \"http://json-schema.org/draft-04/schema#\", ",
+                      "  \"additionalProperties\": false, ",
+                      "  \"definitions\": {}, ",
+                      "  \"properties\": {",
+                      "    \"links\": {",
+                      "      \"additionalItems\": false, ",
+                      "      \"items\": {",
+                      "        \"description\": \"This accepts anything, as long as it's valid JSON.\", ",
+                      "        \"title\": \"Empty Object\"",
+                      "      }, ",
+                      "      \"type\": \"array\"",
+                      "    }, ",
+                      "    \"personId\": {",
+                      "      \"type\": \"integer\"",
+                      "    }, ",
+                      "    \"userFullName\": {",
+                      "      \"type\": \"string\"",
+                      "    }, ",
+                      "    \"userId\": {",
+                      "      \"type\": \"integer\"",
+                      "    }, ",
+                      "    \"userName\": {",
+                      "      \"type\": \"string\"",
+                      "    }, ",
+                      "    \"userRoles\": {",
+                      "      \"additionalItems\": false, ",
+                      "      \"items\": {",
+                      "        \"additionalProperties\": false, ",
+                      "        \"properties\": {",
+                      "          \"authorities\": {",
+                      "            \"additionalItems\": false, ",
+                      "            \"items\": {",
+                      "              \"type\": \"string\"",
+                      "            }, ",
+                      "            \"type\": \"array\"",
+                      "          }, ",
+                      "          \"scopes\": {",
+                      "            \"additionalItems\": false, ",
+                      "            \"items\": {",
+                      "              \"additionalProperties\": false, ",
+                      "              \"properties\": {",
+                      "                \"companyId\": {",
+                      "                  \"type\": \"integer\"",
+                      "                }, ",
+                      "                \"payrollIds\": {",
+                      "                  \"additionalItems\": false, ",
+                      "                  \"items\": {",
+                      "                    \"type\": \"integer\"",
+                      "                  }, ",
+                      "                  \"type\": \"array\"",
+                      "                }, ",
+                      "                \"structure\": {",
+                      "                  \"additionalItems\": false, ",
+                      "                  \"items\": {",
+                      "                    \"description\": \"This accepts anything, as long as it's valid JSON.\", ",
+                      "                    \"title\": \"Empty Object\"",
+                      "                  }, ",
+                      "                  \"type\": \"array\"",
+                      "                }",
+                      "              }, ",
+                      "              \"type\": \"object\"",
+                      "            }, ",
+                      "            \"type\": \"array\"",
+                      "          }",
+                      "        }, ",
+                      "        \"type\": \"object\"",
+                      "      }, ",
+                      "      \"type\": \"array\"",
+                      "    }",
+                      "  }, ",
+                      "  \"type\": \"object\"",
+                      "});",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        JSON Schema for oauth service response.",
+                      " * DESCRIPTION:",
+                      " *              Do validates the response of a successfully generated access token.",
+                      " */  ",
+                      "pm.globals.set(\"oauthSchema\",  {",
+                      "  \"definitions\": {}, ",
+                      "  \"$schema\": \"http://json-schema.org/draft-06/schema#\", ",
+                      "  \"type\": \"object\", ",
+                      "  \"required\": [",
+                      "    \"access_token\", ",
+                      "    \"token_type\", ",
+                      "    \"refresh_token\", ",
+                      "    \"expires_in\", ",
+                      "    \"scope\"",
+                      "  ], ",
+                      "  \"properties\": {",
+                      "    \"access_token\": {",
+                      "      \"type\": \"string\"",
+                      "    }, ",
+                      "    \"token_type\": {",
+                      "      \"type\": \"string\"",
+                      "    }, ",
+                      "    \"refresh_token\": {",
+                      "      \"type\": \"string\"",
+                      "    }, ",
+                      "    \"expires_in\": {",
+                      "      \"type\": \"integer\"",
+                      "    }, ",
+                      "    \"scope\": {",
+                      "      \"type\": \"string\"",
+                      "    }",
+                      "  }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "HEAD",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "http://www.google.com.mx",
+                "description": "> `Session Set-up:`This request is empty and was made for setting common tests in to a global variable for session service requests."
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "438a79ad-72e8-4149-b1f0-f1841cd50ab5",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "3bb65c18-c6ab-4d3e-8811-d550b758d686",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "e7551aea-b8ad-ae09-cd75-903f389d97f8",
+          "name": "Request access with bad credentials",
+          "description": "**Feature:** Validate a login request with bad credentials.\n\n**In order** to validate bad credentials <br/>\n**as** a user of HCM <br/>\n**i expect** service to validates wrong attempts of login.",
+          "item": [
+            {
+              "_postman_id": "8cf6e8da-c2a5-24ae-6df6-a81c5c496301",
+              "name": "Incorrect user",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "690f5208-ff9a-42d2-bded-f2112b7a69bf",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Set initial values on environment variables",
+                      "postman.setEnvironmentVariable(\"userName\", \"badUserName\");",
+                      "postman.setEnvironmentVariable(\"password\", \"123\");"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "08ab150a-277a-4867-ab20-50fa9860959e",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    eval(globals.clearUserAccountCredentials)();",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Incorrect user\", function(){",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "           ",
+                      "        it(\"should return a message including the string 'Bad Credentials'\", function(){",
+                      "          response.body.error_description.should.include(\"Bad credentials\",\"Expected message is not included\"); ",
+                      "        });",
+                      "           ",
+                      "        it(\"expect response body to not have an access token and refresh token properties\", function(){",
+                      "          expect(response.body).to.not.have.any.property(\"access_token\", \"refresh_token\");",
+                      "        });",
+                      "      });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&grant_type=password&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "required value"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "required value"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "required value"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "required value"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "required value"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Wrong username.\n\n**Given** a user gives a bad username<br />\n**and** a valid password<br />\n**when** user request login<br />\n**then** user should not get access.\n> `Wrong username:`is considered an inexistent username or a misspell."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "846f6c44-7970-b68d-1947-4f0bb384e5b2",
+              "name": "Incorrect password",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "f143d306-61b5-47bb-9c8f-34c287be284b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Set initial values on environment variables",
+                      "postman.setEnvironmentVariable(\"userName\", \"rene\");",
+                      "postman.setEnvironmentVariable(\"password\", \"badPassword\");"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "43074629-e3ba-47b1-a391-182bfa7df7b7",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)();",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "   eval(globals.clearUserAccountCredentials)();",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Incorrect password\", function(){",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        })",
+                      "        it(\"should return a message including the string 'Bad Credentials'\", function(){",
+                      "          response.body.error_description.should.include(\"Bad credentials\",\"Expected message is not included\"); ",
+                      "        })",
+                      "           ",
+                      "        it(\"expect response body to not have an access token and refresh token properties\", function(){",
+                      "          expect(response.body).to.not.have.any.property(\"access_token\", \"refresh_token\");",
+                      "        })",
+                      "      });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&grant_type=password&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Wrong password.\n\n**Given** a user gives a valid username<br />\n**and** a wrong password<br />\n**when** user request login<br />\n**then** user should not get access.\n> `Wrong password:`is considered a misspelled password or a null value."
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "c31e31c9-3b4f-4b72-896a-c0b40d51fb4f",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "640b545a-52ba-4080-8014-15892efd57de",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "e9cead20-2ac2-aeab-ba6d-044af3824740",
+          "name": "Request login does not include all necessary parameters",
+          "description": "**Feature:** Validate mandatory parameters.\n\n**In order** to achieve a valid login request <br/>\n**as** a consumer of HCM's API <br/>\n**i expect** service to validates all required values.",
+          "item": [
+            {
+              "_postman_id": "530fcc75-069c-aac9-83c4-cfe6b2672a54",
+              "name": "The username is not included at url request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "75f354ef-460f-4027-8873-8e80fa0a1d22",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Incomplete parameters for request\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "       //Pending test",
+                      "       /*",
+                      "        it(\"must return a 1005 code when username param is not set on to request\", function(){",
+                      "           expect(response.body.errors[\"positionJobTitles[0].jobTitle\"]).to.not.be.empty;",
+                      "        });",
+                      "        */",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "dca0825b-fe3c-4a0c-9487-80e7bdafabf7",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/oauth/token?password={{password}}&grant_type=password&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "Mandatory value",
+                      "disabled": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request does not include the username param on the URL.\n\n**Given** the url does not include the username param<br />\n**and** all other required values are given<br />\n**when** user request login<br />\n**then** service must throw and advice for missing value with 1005 code and a 400 http status code."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "64ea48c9-cac5-688a-9df1-2ea6d18ebd4c",
+              "name": "The password is not included at url request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "47ca9993-6604-427c-9188-206581fb645f",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Incomplete parameters for request\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "        //Pending test",
+                      "       /*",
+                      "        it(\"must return a 1005 code when password param is not set on to request\", function(){",
+                      "           expect(response.body.errors[\"positionJobTitles[0].jobTitle\"]).to.not.be.empty;",
+                      "        });",
+                      "        */",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&grant_type=password&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "Mandatory value",
+                      "disabled": true
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request does not include the password param on the URL.\n\n**Given** the url does not include the password param<br />\n**and** all other required values are given<br />\n**when** user request login<br />\n**then** service must throw and advice for missing value with 1005 code and a 400 http status code."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "e6919a8c-cccd-d3c4-1891-c4899cfa28e2",
+              "name": "The grant_type is not included at url request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "db23f6bb-e875-46aa-9999-b32028261c21",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Incomplete parameters for request\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "        //Pending test",
+                      "       /*",
+                      "        it(\"must return a 1005 code when grant_type param is not set on to request\", function(){",
+                      "           expect(response.body.errors[\"positionJobTitles[0].jobTitle\"]).to.not.be.empty;",
+                      "        });",
+                      "        */",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "Mandatory value",
+                      "disabled": true
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request does not include the grant_type param on the URL.\n\n**Given** the url does not include the grant_type param<br />\n**and** all other required values are given<br />\n**when** user request login<br />\n**then** service must throw and advice for missing value with 1005 code and a 400 http status code."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "add0a06d-6db2-07f5-6f06-ef9287740aa3",
+              "name": "The client_id is not included at url request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "c80f1be7-8016-43c8-8e49-aa052cf1bff8",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Incomplete parameters for request\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "        //Pending test",
+                      "       /*",
+                      "        it(\"must return a 1005 code when client_id param is not set on to request\", function(){",
+                      "           expect(response.body.errors[\"positionJobTitles[0].jobTitle\"]).to.not.be.empty;",
+                      "        });",
+                      "        */",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&grant_type=password&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "Mandatory value",
+                      "disabled": true
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request does not include the client_id param on the URL.\n\n**Given** the url does not include the client_id param<br />\n**and** all other required values are given<br />\n**when** user request login<br />\n**then** service must throw and advice for missing value with 1005 code and a 400 http status code."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "5136ab05-954a-a25a-c063-d20a271f4be2",
+              "name": "The client_secret is not included at url request",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "a879b715-40c1-4080-96f4-9032906c1763",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Incomplete parameters for request\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 400 http status code\", function(){",
+                      "           response.should.have.status(400);",
+                      "        });",
+                      "        //Pending test",
+                      "       /*",
+                      "        it(\"must return a 1005 code when client_secret param is not set on to request\", function(){",
+                      "           expect(response.body.errors[\"positionJobTitles[0].jobTitle\"]).to.not.be.empty;",
+                      "        });",
+                      "        */",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&grant_type=password&client_id=client",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true,
+                      "description": "Mandatory value"
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true,
+                      "description": "Mandatory value",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request does not include the client_secret param on the URL.\n\n**Given** the url does not include the client_secret param<br />\n**and** all other required values are given<br />\n**when** user request login<br />\n**then** service must throw and advice for missing value with 1005 code and a 400 http status code."
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "663c25c8-5afa-de2a-0e79-d2ac8d643235",
+          "name": "Request access with valid credentials",
+          "description": "**Feature:** Validate a login request with valid credentials.\n\n**In order** to login into HCM <br/>\n**as** a registered user of HCM <br/>\n**i expect** service to validate login when my user account.\n\n> Rules:\n* Active account.\n* Enabled account.\n* Not marked as deleted.\n* Not marked as expired.\n* Not marked as locked.\n* Not marked as deleted.",
+          "item": [
+            {
+              "_postman_id": "1ff446b0-5d93-493c-a34f-19879fe6e313",
+              "name": "Valid credentials of an active user",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "04a02daf-765b-4fa9-adfc-7eb303928299",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/*",
+                      "A valid user account must be used in order to make this test pass,",
+                      "this means that used user account must be active, non expired,",
+                      "non blocked, enabled, non deleted and non locked.",
+                      "*/",
+                      "postman.setEnvironmentVariable(\"userName\", \"nadia\");",
+                      "postman.setEnvironmentVariable(\"password\", \"123\");"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "116c416f-a8e4-4d57-9c95-c869d3cbaf0f",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)();",
+                      "});",
+                      "",
+                      "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
+                      "after(\"Verify user account credentials\", () => {",
+                      "    describe(\"User name and password variables must persist on all Test suite\", function(){",
+                      "       it(\"userName environment varible is not empty\", function(){",
+                      "           expect(environment.userName).to.be.not.empty;",
+                      "       });",
+                      "       ",
+                      "       it(\"password environment varible is not empty\", function(){",
+                      "           expect(environment.password).to.be.not.empty;",
+                      "       });",
+                      "    });",
+                      "});",
+                      "",
+                      "// access_token format.",
+                      "const regex = /^\\w{8}\\-\\w{4}\\-\\w{4}\\-\\w{4}\\-\\w{12}$/;",
+                      "",
+                      "var passed = false;",
+                      "",
+                      "try{",
+                      "    describe(\"Valid user and password\",function(){",
+                      "        it(\"Response body should match versus oauth schema\", function(){",
+                      "            response.body.should.have.schema(globals.oauthSchema);",
+                      "        });",
+                      "       ",
+                      "        it(\"should return a 200 http status code\",function(){",
+                      "           response.should.have.status(200);",
+                      "        }); ",
+                      "           ",
+                      "        it(\"should generate an access token\", function(){",
+                      "            response.body.access_token.should.not.empty;",
+                      "        });",
+                      "           ",
+                      "        it(\"should have a specific format\", function(){",
+                      "            // # means a char and - means separator",
+                      "            //Access_token Format: ########-####-####-####-############",
+                      "            passed = expect(regex.test(response.body.access_token)).to.be.true;",
+                      "            if(passed){",
+                      "                // Set the access token in an environment variable in order to be used in furter tests.",
+                      "                postman.setEnvironmentVariable(\"access_token\", response.body.access_token);",
+                      "            }",
+                      "        });",
+                      "           ",
+                      "        it(\"should have a non empty refresh token\", function(){",
+                      "            response.body.refresh_token.should.not.empty;",
+                      "        });",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{url}}/oauth/token?username={{userName}}&password={{password}}&grant_type=password&client_id=client&client_secret=secret",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "oauth",
+                    "token"
+                  ],
+                  "query": [
+                    {
+                      "key": "username",
+                      "value": "{{userName}}",
+                      "equals": true
+                    },
+                    {
+                      "key": "password",
+                      "value": "{{password}}",
+                      "equals": true
+                    },
+                    {
+                      "key": "grant_type",
+                      "value": "password",
+                      "equals": true
+                    },
+                    {
+                      "key": "client_id",
+                      "value": "client",
+                      "equals": true
+                    },
+                    {
+                      "key": "client_secret",
+                      "value": "secret",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Login request with a valid username and password.\n\n**Given** a user requests login<br/>\n**and** user account is active<br/>\n**when** user request login<br/>\n**then** service must response with a 200 http status code\n**and** must generate an access_token.\n\n> `Active user account:` Means in DB isActive = 1, isEnabled = 1, isDeleted = 0"
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "aca2e7f7-90dd-c58d-8718-34676ae89219",
+          "name": "Check Permissions",
+          "description": "**Feature:** Validate to get permissions from an active and loged user.\n\n**In order** to check the service which get the permissions list <br/>\n**as** a registered, active and loged user of HCM <br/>\n**i expect** service to return my user permissions.\n\n> Rules:\n* Active account.\n* Enabled account.\n* Active sesión(Token generated).\n* Not marked as deleted.\n* Not marked as expired.\n* Not marked as locked.\n* Not marked as deleted.",
+          "item": [
+            {
+              "_postman_id": "adeef0d2-9604-e915-c13e-7a2fb24f19b4",
+              "name": "Request does not include access_token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "6c99a9d9-ccf7-417a-b116-5769fdfbf316",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "//Eval a request without an access_token",
+                      "eval(globals.checkUserSession)();"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": "{{url}}/api/v1/users/loggedin",
+                "description": "**Scenario:** Request the permissions list of an active user when no access token is given.\n\n**Given** a user requests it permissions list<br />\n**and** no access token is provided\n**when** user send the request action<br />\n**then** service must response with a 401 http status code<br />\n**and** an \"unauthorized\" error message"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "3baf2dbe-2883-c194-ab13-df52c8de3433",
+              "name": "Request include an invalid access_token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "68ee3945-e6df-4635-be09-43310cfebaa1",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)();",
+                      "});",
+                      "",
+                      "/* Test section */",
+                      "//Once global variable \"access_token_request\" is populated with desired data, simply eval it!!!",
+                      "eval(globals.checkUserToken)();",
+                      "",
+                      "//Independly of test result of the above tests, access token must be generated again.",
+                      "eval(globals.requestAccessAgain)();"
+                    ]
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "6b7d92c3-375c-4d32-850c-b0729e5da497",
+                    "type": "text/javascript",
+                    "exec": [
+                      "//Finalize given access_token in order to simulate an expired access_token",
+                      "pm.environment.unset(\"access_token\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{access_token}}"
+                  }
+                ],
+                "body": {},
+                "url": "{{url}}/api/v1/users/loggedin",
+                "description": "**Scenario:** Request the permissions list of an active user with an invalid access token.\n\n**Given** a user requests it permissions list<br />\n**and** given access token is invalid\n**when** user send the request action<br />\n**then** service must response with a 401 http status code<br />\n**and** an \"invalid_token\" error message"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "3bbdea32-18af-0986-c96e-ac3760a742dc",
+              "name": "Get permissions of an active user account",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "df2dfed2-7f8d-4092-bdf1-b67154cc9f0a",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "try {",
+                      "    describe(\"Validate loggedin object\", function(){",
+                      "       it(\"Response body should match versus loggedin Schema\", function(){",
+                      "          response.body.should.have.schema(globals.loggedinSchema) ;",
+                      "       });",
+                      "    });",
+                      "    ",
+                      "} catch(e) {",
+                      "    console.log(e);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{access_token}}"
+                  }
+                ],
+                "body": {},
+                "url": "{{url}}/api/v1/users/loggedin",
+                "description": "**Scenario:** Request the permissions list of an active user account.\n\n**Given** a user requests it permissions list<br />\n**when** user send the request action<br />\n**then** service must response with a 200 http status code\n**and** user's account permissions list."
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "0e23a25e-6c2e-4813-bf99-e0421d641aab",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "0a1ff20f-350d-4aea-987d-45536aaf9183",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        }
+      ]
+    },
+    {
+      "_postman_id": "d66a16c9-f994-a747-66b6-f422fea795a5",
+      "name": "Persons",
+      "description": "",
+      "item": [
+        {
+          "_postman_id": "209e89d2-984c-9f65-3d12-88f7f447ea7d",
+          "name": "Person Set-up",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "9dbec320-89bd-06dc-ada8-54066098943b",
+              "name": "Set Person global configurations",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "7454eecc-8da7-4adc-921b-1aa71b4f83bc",
+                    "type": "text/javascript",
+                    "exec": [
+                      ""
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "04c9213d-2fb8-424e-8275-fbe3489610cb",
+                    "type": "text/javascript",
+                    "exec": [
+                      "/*#########################Schemas#########################*/",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Schema for Get Person Detail Schema service response.",
+                      " * DESCRIPTION:",
+                      " *              Do validates the response of Person detail service, according to defined json schema by analysis area.",
+                      " * ",
+                      " */   ",
+                      "pm.globals.set(\"personSchema\", {",
+                      "  \"definitions\": {},",
+                      "  \"$schema\": \"http://json-schema.org/draft-06/schema#\",",
+                      "  \"type\": \"object\",",
+                      "  \"additionalProperties\": false,",
+                      "  \"properties\": {",
+                      "    \"personId\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"firstName\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"middleName\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"lastName\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"secondLastName\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"taxId\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"curp\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"description\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"birthDate\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"weight\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"height\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"bloodType\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"bloodTypeId\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"gender\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"genderId\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        }",
+                      "      },",
+                      "      \"required\": [",
+                      "        \"genderId\"",
+                      "      ]",
+                      "    },",
+                      "    \"maritalStatus\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"maritalStatusId\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"country\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"countryId\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        },",
+                      "        \"phoneCode\": {",
+                      "          \"type\": \"integer\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"state\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"stateId\": {",
+                      "          \"type\": \"string\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"locality\": {",
+                      "      \"type\": \"object\",",
+                      "      \"additionalProperties\": false,",
+                      "      \"properties\": {",
+                      "        \"localityId\": {",
+                      "          \"type\": \"string\"",
+                      "        },",
+                      "        \"name\": {",
+                      "          \"type\": \"string\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"isActive\": {",
+                      "      \"type\": \"boolean\"",
+                      "    },",
+                      "    \"identifications\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"identificationId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"value\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"issuedDate\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"expirationDate\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"country\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"countryId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"phoneCode\": {",
+                      "                \"type\": \"integer\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"identificationType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"identificationTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"isPrincipal\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"addresses\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"addressId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"addressLine1\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"addressLine2\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"addressLine3\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"isPrincipal\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"otherLocality\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"zipCode\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"addressType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"addressTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"country\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"countryId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"phoneCode\": {",
+                      "                \"type\": \"integer\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"locality\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"localityId\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"state\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"stateId\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"phones\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"phoneId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"phoneType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"phoneTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isPrincipal\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"phoneNumber\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"phoneExtension\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"country\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"countryId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"phoneCode\": {",
+                      "                \"type\": \"integer\"",
+                      "              }",
+                      "            }",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"emails\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"emailId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"emailType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"emailTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"email\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"isPrincipal\": {",
+                      "            \"type\": \"boolean\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"socialNetworks\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"socialNetworkId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"socialNetworkType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"socialNetworkTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"accountName\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"url\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"isPrincipal\": {",
+                      "            \"type\": \"boolean\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"nationalities\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"nationalityId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"country\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"countryId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"nationality\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"cards\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"cardId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"cardType\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"cardTypeId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"cardProvider\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"cardProviderId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"cardNumber\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"alias\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"isCLABE\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"personContacts\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"personContactId\": {",
+                      "            \"type\": \"integer\"",
+                      "          },",
+                      "          \"relationship\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"relationshipId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"name\": {",
+                      "                \"type\": \"string\"",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"relatedPerson\": {",
+                      "            \"type\": \"object\",",
+                      "            \"additionalProperties\": false,",
+                      "            \"properties\": {",
+                      "              \"relatedPersonId\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"gender\": {",
+                      "                \"type\": \"object\",",
+                      "                \"additionalProperties\": false,",
+                      "                \"properties\": {",
+                      "                  \"genderId\": {",
+                      "                    \"type\": \"integer\"",
+                      "                  },",
+                      "                  \"name\": {",
+                      "                    \"type\": \"string\"",
+                      "                  }",
+                      "                }",
+                      "              },",
+                      "              \"firstName\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"middleName\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"lastName\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"secondLastName\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"taxId\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"curp\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"birthDate\": {",
+                      "                \"type\": \"integer\"",
+                      "              },",
+                      "              \"occupation\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"companyName\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"isActive\": {",
+                      "                \"type\": \"boolean\"",
+                      "              },",
+                      "              \"relatedPersonAddresses\": {",
+                      "                \"type\": \"array\",",
+                      "                \"items\": {",
+                      "                  \"type\": \"object\",",
+                      "                  \"additionalProperties\": false,",
+                      "                  \"properties\": {",
+                      "                    \"relatedPersonAddressId\": {",
+                      "                      \"type\": \"integer\"",
+                      "                    },",
+                      "                    \"addressLine1\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"addressLine2\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"addressLine3\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"otherLocality\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"zipCode\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"addressType\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"addressTypeId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"country\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"countryId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        },",
+                      "                        \"phoneCode\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"locality\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"localityId\": {",
+                      "                          \"type\": \"string\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"state\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"stateId\": {",
+                      "                          \"type\": \"string\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"isActive\": {",
+                      "                      \"type\": \"boolean\"",
+                      "                    }",
+                      "                  }",
+                      "                }",
+                      "              },",
+                      "              \"relatedPersonPhones\": {",
+                      "                \"type\": \"array\",",
+                      "                \"items\": {",
+                      "                  \"type\": \"object\",",
+                      "                  \"additionalProperties\": false,",
+                      "                  \"properties\": {",
+                      "                    \"relatedPersonPhoneId\": {",
+                      "                      \"type\": \"integer\"",
+                      "                    },",
+                      "                    \"phoneType\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"phoneTypeId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"phoneNumber\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"phoneExtension\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"country\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"countryId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        },",
+                      "                        \"phoneCode\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"isActive\": {",
+                      "                      \"type\": \"boolean\"",
+                      "                    }",
+                      "                  }",
+                      "                }",
+                      "              },",
+                      "              \"relatedPersonEmails\": {",
+                      "                \"type\": \"array\",",
+                      "                \"items\": {",
+                      "                  \"type\": \"object\",",
+                      "                  \"additionalProperties\": false,",
+                      "                  \"properties\": {",
+                      "                    \"relatedPersonEmailId\": {",
+                      "                      \"type\": \"integer\"",
+                      "                    },",
+                      "                    \"isActive\": {",
+                      "                      \"type\": \"boolean\"",
+                      "                    },",
+                      "                    \"emailType\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"additionalProperties\": false,",
+                      "                      \"properties\": {",
+                      "                        \"emailTypeId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"name\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    },",
+                      "                    \"email\": {",
+                      "                      \"type\": \"string\"",
+                      "                    }",
+                      "                  }",
+                      "                }",
+                      "              },",
+                      "              \"links\": {",
+                      "                \"type\": \"array\",",
+                      "                \"items\": {",
+                      "                  \"type\": \"object\",",
+                      "                  \"additionalProperties\": false,",
+                      "                  \"properties\": {",
+                      "                    \"rel\": {",
+                      "                      \"type\": \"string\"",
+                      "                    },",
+                      "                    \"href\": {",
+                      "                      \"type\": \"string\"",
+                      "                    }",
+                      "                  }",
+                      "                }",
+                      "              }",
+                      "            }",
+                      "          },",
+                      "          \"isDeceased\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isEconomicallyDependent\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"liveTogether\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isEmergencyContact\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"hasDisability\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isStudent\": {",
+                      "            \"type\": \"boolean\"",
+                      "          },",
+                      "          \"isActive\": {",
+                      "            \"type\": \"boolean\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"createDate\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"createUser\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"lastUpdateDate\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"lastUpdateUser\": {",
+                      "      \"type\": \"string\"",
+                      "    },",
+                      "    \"links\": {",
+                      "      \"type\": \"array\",",
+                      "      \"items\": {",
+                      "        \"type\": \"object\",",
+                      "        \"additionalProperties\": false,",
+                      "        \"properties\": {",
+                      "          \"rel\": {",
+                      "            \"type\": \"string\"",
+                      "          },",
+                      "          \"href\": {",
+                      "            \"type\": \"string\"",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    }",
+                      "  },",
+                      "  \"required\": [",
+                      "    \"personId\",",
+                      "    \"firstName\",",
+                      "    \"lastName\",",
+                      "    \"gender\",",
+                      "    \"isActive\"",
+                      "  ]",
+                      "});",
+                      "",
+                      "/**",
+                      " * AUTHOR:      Rene Alfaro.",
+                      " *",
+                      " * NAME:        Schema for Get Person list.",
+                      " * DESCRIPTION:",
+                      " *              Do validates the response of Person list service, according to defined json schema by analysis area, the response",
+                      " *              will be provided by ElasticSearch.",
+                      " */ ",
+                      "pm.globals.set(\"elasticSearchPersonSchema\", {",
+                      "  \"definitions\": {},",
+                      "  \"$schema\": \"http://json-schema.org/draft-06/schema#\",",
+                      "  \"type\": \"object\",",
+                      "  \"properties\": {",
+                      "    \"took\": {",
+                      "      \"type\": \"integer\"",
+                      "    },",
+                      "    \"timed_out\": {",
+                      "      \"type\": \"boolean\"",
+                      "    },",
+                      "    \"_shards\": {",
+                      "      \"type\": \"object\",",
+                      "      \"properties\": {",
+                      "        \"total\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"successful\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"failed\": {",
+                      "          \"type\": \"integer\"",
+                      "        }",
+                      "      }",
+                      "    },",
+                      "    \"hits\": {",
+                      "      \"type\": \"object\",",
+                      "      \"properties\": {",
+                      "        \"total\": {",
+                      "          \"type\": \"integer\"",
+                      "        },",
+                      "        \"max_score\": {",
+                      "          \"type\": \"null\"",
+                      "        },",
+                      "        \"hits\": {",
+                      "          \"type\": \"array\",",
+                      "          \"items\": {",
+                      "            \"type\": \"object\",",
+                      "            \"properties\": {",
+                      "              \"_index\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"_type\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"_id\": {",
+                      "                \"type\": \"string\"",
+                      "              },",
+                      "              \"_score\": {",
+                      "                \"type\": \"null\"",
+                      "              },",
+                      "              \"_source\": {",
+                      "                \"type\": \"object\",",
+                      "                \"properties\": {",
+                      "                  \"lastName\": {",
+                      "                    \"type\": \"string\"",
+                      "                  },",
+                      "                  \"secondLastName\": {",
+                      "                    \"type\": \"string\"",
+                      "                  },",
+                      "                  \"firstName\": {",
+                      "                    \"type\": \"string\"",
+                      "                  },",
+                      "                  \"taxId\": {",
+                      "                    \"type\": \"string\"",
+                      "                  },",
+                      "                  \"links\": {",
+                      "                    \"type\": \"array\",",
+                      "                    \"items\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"properties\": {",
+                      "                        \"rel\": {",
+                      "                          \"type\": \"string\"",
+                      "                        },",
+                      "                        \"href\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    }",
+                      "                  },",
+                      "                  \"personId\": {",
+                      "                    \"type\": \"integer\"",
+                      "                  },",
+                      "                  \"middleName\": {",
+                      "                    \"type\": \"string\"",
+                      "                  },",
+                      "                  \"isActive\": {",
+                      "                    \"type\": \"boolean\"",
+                      "                  },",
+                      "                  \"employees\": {",
+                      "                    \"type\": \"array\",",
+                      "                    \"items\": {",
+                      "                      \"type\": \"object\",",
+                      "                      \"properties\": {",
+                      "                        \"admissionDate\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"employeeAgreements\": {",
+                      "                          \"type\": \"array\",",
+                      "                          \"items\": {",
+                      "                            \"type\": \"object\",",
+                      "                            \"properties\": {",
+                      "                              \"positionDetails\": {",
+                      "                                \"type\": \"array\",",
+                      "                                \"items\": {",
+                      "                                  \"type\": \"object\",",
+                      "                                  \"properties\": {",
+                      "                                    \"employeePositionStatus\": {",
+                      "                                      \"type\": \"object\",",
+                      "                                      \"properties\": {",
+                      "                                        \"employeePositionStatusId\": {",
+                      "                                          \"type\": \"integer\"",
+                      "                                        },",
+                      "                                        \"name\": {",
+                      "                                          \"type\": \"string\"",
+                      "                                        }",
+                      "                                      }",
+                      "                                    },",
+                      "                                    \"position\": {",
+                      "                                      \"type\": \"object\",",
+                      "                                      \"properties\": {",
+                      "                                        \"positionJobTitles\": {",
+                      "                                          \"type\": \"array\",",
+                      "                                          \"items\": {",
+                      "                                            \"type\": \"object\",",
+                      "                                            \"properties\": {",
+                      "                                              \"positionJobTitleId\": {",
+                      "                                                \"type\": \"integer\"",
+                      "                                              },",
+                      "                                              \"endDate\": {",
+                      "                                                \"type\": \"null\"",
+                      "                                              },",
+                      "                                              \"jobTitle\": {",
+                      "                                                \"type\": \"object\",",
+                      "                                                \"properties\": {",
+                      "                                                  \"jobTitleId\": {",
+                      "                                                    \"type\": \"integer\"",
+                      "                                                  },",
+                      "                                                  \"code\": {",
+                      "                                                    \"type\": \"string\"",
+                      "                                                  },",
+                      "                                                  \"hierarchyLevel\": {",
+                      "                                                    \"type\": \"object\",",
+                      "                                                    \"properties\": {",
+                      "                                                      \"hierarchy\": {",
+                      "                                                        \"type\": \"object\",",
+                      "                                                        \"properties\": {",
+                      "                                                          \"hierarchyId\": {",
+                      "                                                            \"type\": \"integer\"",
+                      "                                                          },",
+                      "                                                          \"name\": {",
+                      "                                                            \"type\": \"string\"",
+                      "                                                          }",
+                      "                                                        }",
+                      "                                                      },",
+                      "                                                      \"name\": {",
+                      "                                                        \"type\": \"string\"",
+                      "                                                      },",
+                      "                                                      \"hierarchyLevelId\": {",
+                      "                                                        \"type\": \"integer\"",
+                      "                                                      }",
+                      "                                                    }",
+                      "                                                  },",
+                      "                                                  \"name\": {",
+                      "                                                    \"type\": \"string\"",
+                      "                                                  }",
+                      "                                                }",
+                      "                                              },",
+                      "                                              \"startDate\": {",
+                      "                                                \"type\": \"integer\"",
+                      "                                              }",
+                      "                                            }",
+                      "                                          }",
+                      "                                        },",
+                      "                                        \"code\": {",
+                      "                                          \"type\": \"string\"",
+                      "                                        },",
+                      "                                        \"positionId\": {",
+                      "                                          \"type\": \"integer\"",
+                      "                                        },",
+                      "                                        \"positionType\": {",
+                      "                                          \"type\": \"object\",",
+                      "                                          \"properties\": {",
+                      "                                            \"positionTypeId\": {",
+                      "                                              \"type\": \"integer\"",
+                      "                                            },",
+                      "                                            \"name\": {",
+                      "                                              \"type\": \"string\"",
+                      "                                            }",
+                      "                                          }",
+                      "                                        },",
+                      "                                        \"superiorPosition\": {",
+                      "                                          \"type\": \"null\"",
+                      "                                        },",
+                      "                                        \"hierarchyLevel\": {",
+                      "                                          \"type\": \"object\",",
+                      "                                          \"properties\": {",
+                      "                                            \"hierarchy\": {",
+                      "                                              \"type\": \"object\",",
+                      "                                              \"properties\": {",
+                      "                                                \"hierarchyId\": {",
+                      "                                                  \"type\": \"integer\"",
+                      "                                                },",
+                      "                                                \"name\": {",
+                      "                                                  \"type\": \"string\"",
+                      "                                                }",
+                      "                                              }",
+                      "                                            },",
+                      "                                            \"name\": {",
+                      "                                              \"type\": \"string\"",
+                      "                                            },",
+                      "                                            \"hierarchyLevelId\": {",
+                      "                                              \"type\": \"integer\"",
+                      "                                            }",
+                      "                                          }",
+                      "                                        },",
+                      "                                        \"company\": {",
+                      "                                          \"type\": \"object\",",
+                      "                                          \"properties\": {",
+                      "                                            \"companyId\": {",
+                      "                                              \"type\": \"integer\"",
+                      "                                            },",
+                      "                                            \"companyName\": {",
+                      "                                              \"type\": \"string\"",
+                      "                                            },",
+                      "                                            \"alias\": {",
+                      "                                              \"type\": \"string\"",
+                      "                                            }",
+                      "                                          }",
+                      "                                        },",
+                      "                                        \"positionOrgCharts\": {",
+                      "                                          \"type\": \"null\"",
+                      "                                        },",
+                      "                                        \"structureNodePositions\": {",
+                      "                                          \"type\": \"array\",",
+                      "                                          \"items\": {",
+                      "                                            \"type\": \"object\",",
+                      "                                            \"properties\": {",
+                      "                                              \"endDate\": {",
+                      "                                                \"type\": \"null\"",
+                      "                                              },",
+                      "                                              \"structureNodePositionId\": {",
+                      "                                                \"type\": \"integer\"",
+                      "                                              },",
+                      "                                              \"structureNode\": {",
+                      "                                                \"type\": \"object\",",
+                      "                                                \"properties\": {",
+                      "                                                  \"code\": {",
+                      "                                                    \"type\": \"string\"",
+                      "                                                  },",
+                      "                                                  \"name\": {",
+                      "                                                    \"type\": \"string\"",
+                      "                                                  },",
+                      "                                                  \"structureNodeId\": {",
+                      "                                                    \"type\": \"integer\"",
+                      "                                                  },",
+                      "                                                  \"structure\": {",
+                      "                                                    \"type\": \"object\",",
+                      "                                                    \"properties\": {",
+                      "                                                      \"name\": {",
+                      "                                                        \"type\": \"string\"",
+                      "                                                      },",
+                      "                                                      \"structureId\": {",
+                      "                                                        \"type\": \"integer\"",
+                      "                                                      },",
+                      "                                                      \"isPrincipal\": {",
+                      "                                                        \"type\": \"boolean\"",
+                      "                                                      }",
+                      "                                                    }",
+                      "                                                  }",
+                      "                                                }",
+                      "                                              },",
+                      "                                              \"startDate\": {",
+                      "                                                \"type\": \"integer\"",
+                      "                                              }",
+                      "                                            }",
+                      "                                          }",
+                      "                                        }",
+                      "                                      }",
+                      "                                    },",
+                      "                                    \"isPrincipal\": {",
+                      "                                      \"type\": \"boolean\"",
+                      "                                    }",
+                      "                                  }",
+                      "                                }",
+                      "                              }",
+                      "                            }",
+                      "                          }",
+                      "                        },",
+                      "                        \"employeeId\": {",
+                      "                          \"type\": \"integer\"",
+                      "                        },",
+                      "                        \"employeeNumber\": {",
+                      "                          \"type\": \"string\"",
+                      "                        }",
+                      "                      }",
+                      "                    }",
+                      "                  },",
+                      "                  \"birthDate\": {",
+                      "                    \"type\": \"null\"",
+                      "                  },",
+                      "                  \"curp\": {",
+                      "                    \"type\": \"string\"",
+                      "                  }",
+                      "                }",
+                      "              },",
+                      "              \"sort\": {",
+                      "                \"type\": \"array\",",
+                      "                \"items\": {",
+                      "                  \"type\": \"integer\"",
+                      "                }",
+                      "              }",
+                      "            }",
+                      "          }",
+                      "        }",
+                      "      }",
+                      "    }",
+                      "  }",
+                      "});"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "HEAD",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": "http://www.google.com.mx",
+                "description": "> `Common tests:`This request is empty and was made for setting up common specific configurations for person's tests."
+              },
+              "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "fc96625a-fdcc-47e5-aa89-b085450f718d",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "9367df2e-e668-47cf-b5d1-db949d9900d5",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "4c8a11a2-a798-e5a7-4279-0d4f08f97e2a",
+          "name": "Request persons",
+          "description": "",
+          "item": [
+            {
+              "_postman_id": "f71201ee-bd79-7c57-85bd-a7ec22c61cdd",
+              "name": "Search_Persons",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "f14aa5da-bebe-42c1-8751-aac17a863619",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    postman.clearEnvironmentVariable(\"sizeForQuery\");",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Get request to a valid person\", function(){",
+                      "       it(\"Response should match versus person Schema\", function(){",
+                      "            response.body.should.have.schema(globals.elasticSearchPersonSchema);",
+                      "       });",
+                      "       ",
+                      "       it(\"Response should be a 200 http status code\", function(){",
+                      "            response.should.have.status(200);",
+                      "       });",
+                      "       ",
+                      "       it(\"Response must not be lower than specified size of Query\", function(){",
+                      "           let querySize = JSON.parse(response.body).hits.hits.length;",
+                      "           querySize.should.be.at.most(parseInt(pm.environment.get(\"sizeForQuery\")),",
+                      "                                                \"Service is returning more items than specified at query size\");",
+                      "       });",
+                      "    });",
+                      "} catch(e){",
+                      "   console.log(e);",
+                      "   console.log(response);",
+                      "}"
+                    ]
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "a9f977a2-bee8-41d3-a66a-a7588a7e2cbc",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var defaultSizeForQuery = 10; //Default value when execution comes from postman, otherwise value will be taken from data file.",
+                      "postman.setEnvironmentVariable(\"sizeForQuery\", (data.length ? data.personTestData.inexistentPerson.size : defaultSizeForQuery));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"_source\": {\r\n    \"include\": [\r\n      \"personId\",\r\n      \"firstName\",\r\n      \"middleName\",\r\n      \"lastName\",\r\n      \"secondLastName\",\r\n      \"taxId\",\r\n      \"curp\",\r\n      \"birthDate\",\r\n      \"isActive\",\r\n      \"employees.employeeId\",\r\n      \"employees.employeeNumber\",\r\n      \"employees.admissionDate\",\r\n      \"employees.employeeAgreements.positionDetails.position\",\r\n      \"employees.employeeAgreements.positionDetails.isPrincipal\",\r\n      \"links\",\r\n      \"employees.employeeAgreements.positionDetails.employeePositionStatus.employeePositionStatusId\",\r\n      \"employees.employeeAgreements.positionDetails.employeePositionStatus.name\"\r\n    ]\r\n  },\r\n  \"size\": {{sizeForQuery}},\r\n  \"query\": {\r\n    \"bool\": {\r\n      \"must\": [\r\n        {\r\n          \"or\": [\r\n            {\r\n              \"terms\": {\r\n                \"employees.employeeAgreements.positionDetails.employeePositionStatus.employeePositionStatusId\": [\r\n                  1\r\n                ]\r\n              }\r\n            },\r\n            {\r\n              \"missing\": {\r\n                \"field\": \"employees\"\r\n              }\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  \"sort\": [\r\n    {\r\n      \"employees.employeeId\": {\r\n        \"missing\": \"_last\",\r\n        \"ignore_unmapped\": true\r\n      }\r\n    }\r\n  ]\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{url}}/api/v1/search/persons/persons?pretty=true",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "search",
+                    "persons",
+                    "persons"
+                  ],
+                  "query": [
+                    {
+                      "key": "pretty",
+                      "value": "true",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "Search information in persons index and type in elastic search"
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "dd55f6a6-f642-b074-debe-4e5db949c177",
+          "name": "Request get person detail",
+          "description": "**Feature:** Validate detailed information from a valid person.\n\n**In order** to validate requested information <br/>\n**as** a registered user of HCM <br/>\n**i expect** service to respond with the requested information.",
+          "item": [
+            {
+              "_postman_id": "1b196102-10c2-41da-a17b-e89d4a673b65",
+              "name": "Get an inexistent person recordId",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "a5bee44e-a6ff-4ed1-9602-3730b789cd0b",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var defaultInexistentPerson = 666666666; //Default value when execution comes from postman, otherwise value will be taken from data file.",
+                      "postman.setEnvironmentVariable(\"personId\", (data.length ? data.personTestData.inexistentPerson.personId : defaultInexistentPerson));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "69800050-5175-4224-ae1e-776910898d7f",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    postman.clearEnvironmentVariable(\"personId\");",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Get request to an inexistent person\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(globals.errorsInSchema);",
+                      "        });",
+                      "        ",
+                      "        it(\"should be a 404 http status code\", function(){",
+                      "            response.should.have.status(404);",
+                      "        });",
+                      "       ",
+                      "        it(\"should have an API response code: 1012-Resource not found\", function(){",
+                      "            for(error in response.body.errors.personId){",
+                      "                expect(response.body.errors.personId[error].code).to.be.equals(\"1012\");",
+                      "                expect(response.body.errors.personId[error].message).to.be.equals(\"Resource not found\");",
+                      "            }",
+                      "        });",
+                      "    });",
+                      "} catch(e){",
+                      "   console.log(e);",
+                      "   console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/api/v1/persons/:personId",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "persons",
+                    ":personId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "personId",
+                      "value": "{{personId}}"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Request person detail information from a non existent person.\n\n**Given** a user request the detailed info from an inexistent person. <br />\n**when** user send the get person detail request<br />\n**then** service must respond with a 404 http status code."
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "1753e31e-7241-dcad-cfdb-aa50da4c08ac",
+              "name": "Get a deleted person",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "17956c4b-6b68-44c7-b558-1331b6cb25dd",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var defaultDeletedPerson = 857; //Default value when execution comes from postman, otherwise value will be taken from data file.",
+                      "postman.setEnvironmentVariable(\"personId\", (data.length ? data.personTestData.deletedPerson.personId : defaultDeletedPerson));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "db5d9a74-4935-40a9-aab9-44c5cbe1d17a",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD)",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    postman.clearEnvironmentVariable(\"personId\");",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Validate person object\", function(){",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(globals.errorsInSchema);",
+                      "        });",
+                      "        ",
+                      "        it(\"should be a 404 http status code\", function(){",
+                      "            response.should.have.status(404);",
+                      "        });",
+                      "       ",
+                      "        it(\"should have an API response code: 1012-Resource not found\", function(){",
+                      "            for(error in response.body.errors.personId){",
+                      "                expect(response.body.errors.personId[error].code).to.be.equals(\"1012\");",
+                      "                expect(response.body.errors.personId[error].message).to.be.equals(\"Resource not found\");",
+                      "            }",
+                      "        });",
+                      "    });",
+                      "} catch(e){",
+                      "   console.log(e);",
+                      "   console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/api/v1/persons/:personId",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "persons",
+                    ":personId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "personId",
+                      "value": "{{personId}}"
+                    }
+                  ]
+                },
+                "description": "Use this call to retrieve the person detail"
+              },
+              "response": []
+            },
+            {
+              "_postman_id": "1be2e9fb-1252-5eda-bc80-073c8e7af4be",
+              "name": "Get a valid person record",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "aa67ed7d-e862-4477-bd8c-e205b27c4ad3",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var defaultActivePerson = 1039; //Default value when execution comes from postman, otherwise value will be taken from data file.",
+                      "postman.setEnvironmentVariable(\"personId\", (data.length ? data.personTestData.activePerson.personId : defaultActivePerson));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "076f413f-bd7c-40dd-a26e-5b8ad7278c20",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    postman.clearEnvironmentVariable(\"personId\");",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Get request to a valid person\", function(){",
+                      "       it(\"Response should match versus person Schema\", function(){",
+                      "            response.body.should.have.schema(globals.personSchema);",
+                      "       });",
+                      "       ",
+                      "       it(\"isActive attribute must be true\", function(){",
+                      "           expect(response.body.isActive).to.be.true;",
+                      "       });",
+                      "       ",
+                      "       it(\"Response should be a 200 http status code\", function(){",
+                      "            response.should.have.status(200);",
+                      "       });",
+                      "    });",
+                      "} catch(e){",
+                      "   console.log(e);",
+                      "   console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/api/v1/persons/:personId",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "persons",
+                    ":personId"
+                  ],
+                  "variable": [
+                    {
+                      "key": "personId",
+                      "value": "{{personId}}"
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Request person detail information.\n\n**Given** a user request the detailed info from a person. <br />\n**and** the requested record is active<br />\n**and** is not marked as deleted<br />\n**when** user send the get person detail request<br />\n**then** service must respond with a single person object."
+              },
+              "response": []
+            }
+          ],
+          "_postman_isSubFolder": true
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "0d4f5748-a59d-48d6-9a7b-518b217c3dc2",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "2e8232bd-21d0-4b6a-8f54-90d83290e86b",
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
+}
