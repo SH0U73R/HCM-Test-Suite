@@ -1776,6 +1776,13 @@
             }
           ],
           "_postman_isSubFolder": true
+        },
+        {
+          "_postman_id": "3b8bc97a-dd1f-8737-1f5d-4ee55212c8ad",
+          "name": "Revoke access_token",
+          "description": "",
+          "item": [],
+          "_postman_isSubFolder": true
         }
       ]
     },
