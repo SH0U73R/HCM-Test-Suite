@@ -1789,19 +1789,44 @@
                 {
                   "listen": "prerequest",
                   "script": {
+                    "id": "de9ebb7b-1b1d-4094-ac72-59fb80a6d33d",
                     "type": "text/javascript",
                     "exec": [
                       "var token = postman.getEnvironmentVariable(\"access_token\");",
-                      "postman.setEnvironmentVariable(\"token\", token.substr(7));"
+                      "postman.setEnvironmentVariable(\"token\", token.includes(\"Bearer\") ? token.substr(7) : token);",
+                      ""
                     ]
                   }
                 },
                 {
                   "listen": "test",
                   "script": {
+                    "id": "7792ebd4-2604-49f6-98ff-6ebec7f34505",
                     "type": "text/javascript",
                     "exec": [
-                      "tests[\"Response time is less than response_time\"] = responseTime < postman.getEnvironmentVariable(\"response_time\");"
+                      "// Load Postman BDD.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
+                      "after(\"Verify user account credentials\", () => {",
+                      "    eval(globalspurgeTestValues());",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Revoke the access_token(Loggin out)\",function(){",
+                      "        it(\"should return a 204 http status code\",function(){",
+                      "           response.should.have.status(204);",
+                      "           eval(globals.requestAccessAgain)();",
+                      "        }); ",
+                      "           ",
+                      "        it(\"access token should be empty\", function(){",
+                      "            response.body.should.be.empty;",
+                      "        });",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
                     ]
                   }
                 }
