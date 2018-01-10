@@ -1781,7 +1781,59 @@
           "_postman_id": "3b8bc97a-dd1f-8737-1f5d-4ee55212c8ad",
           "name": "Revoke access_token",
           "description": "",
-          "item": [],
+          "item": [
+            {
+              "_postman_id": "f5582461-6efa-f05b-63a7-97ddc8bb16c9",
+              "name": "Request access_token revoke",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "var token = postman.getEnvironmentVariable(\"access_token\");",
+                      "postman.setEnvironmentVariable(\"token\", token.substr(7));"
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "tests[\"Response time is less than response_time\"] = responseTime < postman.getEnvironmentVariable(\"response_time\");"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/api/v1/token/revoke?access_token={{token}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "token",
+                    "revoke"
+                  ],
+                  "query": [
+                    {
+                      "key": "access_token",
+                      "value": "{{token}}",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "Use this call to revoke a user token."
+              },
+              "response": []
+            }
+          ],
           "_postman_isSubFolder": true
         }
       ]
