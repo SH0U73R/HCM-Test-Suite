@@ -1829,7 +1829,7 @@
                     }
                   ]
                 },
-                "description": "**Scenario:** Request access token revoke(Loggin out).\n\n**Given** a user wants to end it session<br />\n**when** user send the revoke access_token request<br />\n**then** access_token must be cleared<br />\n**and** access_token must be deleted from sessionStorage property.\n\n\n**Example:**<br/>\nAfter access_token revoke, when the following code is called from console, expected result is \"undefined\"\n```javascript\nwindow.sessionStorage[\"hcmAccessToken\"];\n```"
+                "description": "**Scenario:** Request access token revoke(Loggin out).\n\n**Given** a user wants to end it session<br/>\n**when** user send the revoke access_token request<br/>\n**then** access_token must be cleared<br/>\n**and** service must respond with a 204 status code<br/>\n\n**Example:**<br/>\nAfter access_token revoke, when the following code is called from console, expected result is \"undefined\"\n```javascript\nwindow.sessionStorage[\"hcmAccessToken\"];\n```"
               },
               "response": []
             }
