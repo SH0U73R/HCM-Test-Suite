@@ -243,7 +243,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "b8840c13-d6f4-4be5-94aa-75ff37bf1d39",
+                    "id": "696da321-907f-448b-9b07-a239c62ae604",
                     "type": "text/javascript",
                     "exec": [
                       "/**",
@@ -283,8 +283,8 @@
                       "try{",
                       "    postman.setGlobalVariable(\"purgeTestValues\", () => {",
                       "        for(environmentVariable in environment){",
-                      "            if(environmentVariable != \"url\" && environmentVariable != \"userName\" && environmentVariable != \"password\" ){",
-                      "                console.log(\"environment: \" + environmentVariable);",
+                      "            if(environmentVariable != \"url\" && environmentVariable != \"userName\" && environmentVariable != \"password\" && environmentVariable != \"access_token\"){",
+                      "                console.log(\"Cleared environment variables: \" + environmentVariable);",
                       "                pm.environment.unset(environmentVariable);",
                       "            }",
                       "        } ",
