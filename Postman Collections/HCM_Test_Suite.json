@@ -1801,7 +1801,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "7792ebd4-2604-49f6-98ff-6ebec7f34505",
+                    "id": "0ff47729-cf3c-48b0-97c2-ce01cfc3deab",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD.",
@@ -1809,7 +1809,7 @@
                       "",
                       "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
                       "after(\"Verify user account credentials\", () => {",
-                      "    eval(globalspurgeTestValues());",
+                      "    eval(globals.purgeTestValues)();",
                       "});",
                       "",
                       "try{",
@@ -1821,6 +1821,7 @@
                       "           ",
                       "        it(\"access token should be empty\", function(){",
                       "            response.body.should.be.empty;",
+                      "            console.log(\"access_token: \" + environment.access_token);",
                       "        });",
                       "    });",
                       "} catch(e){",
