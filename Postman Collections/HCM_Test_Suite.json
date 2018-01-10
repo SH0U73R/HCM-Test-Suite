@@ -243,7 +243,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "696da321-907f-448b-9b07-a239c62ae604",
+                    "id": "96697e16-bad3-4b85-98f5-47cbcece0701",
                     "type": "text/javascript",
                     "exec": [
                       "/**",
