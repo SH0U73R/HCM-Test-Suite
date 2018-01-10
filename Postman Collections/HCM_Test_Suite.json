@@ -1858,6 +1858,83 @@
                 "description": "**Scenario:** Request access token revoke(Loggin out).\n\n**Given** a user wants to end it session<br/>\n**when** user send the revoke access_token request<br/>\n**then** access_token must be cleared<br/>\n**and** service must respond with a 204 status code<br/>\n\n**Example:**<br/>\nAfter access_token revoke, when the following code is called from console, expected result is \"undefined\"\n```javascript\nwindow.sessionStorage[\"hcmAccessToken\"];\n```"
               },
               "response": []
+            },
+            {
+              "_postman_id": "4706e2ea-abae-bbe2-7528-45e330a789aa",
+              "name": "Try to revoke an invalid access_token",
+              "event": [
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "de9ebb7b-1b1d-4094-ac72-59fb80a6d33d",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var token = postman.getEnvironmentVariable(\"access_token\");",
+                      "postman.setEnvironmentVariable(\"token\", token.includes(\"Bearer\") ? token.substr(7) : token);",
+                      ""
+                    ]
+                  }
+                },
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "0ff47729-cf3c-48b0-97c2-ce01cfc3deab",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
+                      "after(\"Verify user account credentials\", () => {",
+                      "    eval(globals.purgeTestValues)();",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Revoke the access_token(Loggin out)\",function(){",
+                      "        it(\"should return a 204 http status code\",function(){",
+                      "           response.should.have.status(204);",
+                      "           eval(globals.requestAccessAgain)();",
+                      "        }); ",
+                      "           ",
+                      "        it(\"access token should be empty\", function(){",
+                      "            response.body.should.be.empty;",
+                      "            console.log(\"access_token: \" + environment.access_token);",
+                      "        });",
+                      "    });",
+                      "} catch(e){",
+                      "    console.log(e.error);",
+                      "    console.log(response);",
+                      "}"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {},
+                "url": {
+                  "raw": "{{url}}/api/v1/token/revoke?access_token={{token}}",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "token",
+                    "revoke"
+                  ],
+                  "query": [
+                    {
+                      "key": "access_token",
+                      "value": "{{token}}",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "**Scenario:** Request access token revoke(Loggin out).\n\n**Given** a user wants to end it session<br/>\n**when** user send the revoke access_token request<br/>\n**then** access_token must be cleared<br/>\n**and** service must respond with a 204 status code<br/>\n\n**Example:**<br/>\nAfter access_token revoke, when the following code is called from console, expected result is \"undefined\"\n```javascript\nwindow.sessionStorage[\"hcmAccessToken\"];\n```"
+              },
+              "response": []
             }
           ],
           "_postman_isSubFolder": true
