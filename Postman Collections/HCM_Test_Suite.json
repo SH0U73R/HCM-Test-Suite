@@ -1861,7 +1861,7 @@
             },
             {
               "_postman_id": "4706e2ea-abae-bbe2-7528-45e330a789aa",
-              "name": "Try to revoke an invalid access_token",
+              "name": "Try to revoke an inexistent access_token",
               "event": [
                 {
                   "listen": "prerequest",
