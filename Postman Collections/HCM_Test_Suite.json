@@ -3530,7 +3530,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "6ba22392-3b2f-4b3c-a954-cec8cd500ca1",
+                    "id": "a1aad0be-f0e7-473e-ba94-b4bc21153988",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD implementation.",
@@ -3542,7 +3542,7 @@
                       "});",
                       "",
                       "try{",
-                      "    describe(\"Get request to a valid person\", function(){",
+                      "    describe(\"Get request of concepts with no access_token\", function(){",
                       "       it(\"Response must be unauthorized\", function(){",
                       "            eval(globals.checkUserSession)();",
                       "       });",
