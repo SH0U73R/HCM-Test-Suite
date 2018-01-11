@@ -1866,17 +1866,17 @@
                 {
                   "listen": "prerequest",
                   "script": {
-                    "id": "50a3cfbe-8e61-442e-980f-c48e5964c0ad",
+                    "id": "6a6c96f4-e03d-4387-be00-a76e6b3bc8d3",
                     "type": "text/javascript",
                     "exec": [
-                      "postman.setEnvironmentVariable(\"token\", \"invalid-7521-4203-8e59-accesstoken\");"
+                      "postman.setEnvironmentVariable(\"token\", \"05a9f629-7521-4203-8e59-c2c690aa973f\");"
                     ]
                   }
                 },
                 {
                   "listen": "test",
                   "script": {
-                    "id": "8693bd25-f43d-4aad-bccb-b38337e9fa31",
+                    "id": "3c60c94a-f72a-4809-a489-552426d049cf",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD.",
@@ -1892,6 +1892,10 @@
                       "        it(\"should return a 404 http status code\",function(){",
                       "           response.should.have.status(404);",
                       "        }); ",
+                      "        ",
+                      "        it(\"should validates error schema\", function(){",
+                      "           response.body.should.have.schema(pm.globals.get(\"errorsInSchema\"));",
+                      "        });",
                       "    });",
                       "} catch(e){",
                       "    console.log(e.error);",
