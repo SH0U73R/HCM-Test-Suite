@@ -1866,40 +1866,32 @@
                 {
                   "listen": "prerequest",
                   "script": {
-                    "id": "de9ebb7b-1b1d-4094-ac72-59fb80a6d33d",
+                    "id": "50a3cfbe-8e61-442e-980f-c48e5964c0ad",
                     "type": "text/javascript",
                     "exec": [
-                      "var token = postman.getEnvironmentVariable(\"access_token\");",
-                      "postman.setEnvironmentVariable(\"token\", token.includes(\"Bearer\") ? token.substr(7) : token);",
-                      ""
+                      "postman.setEnvironmentVariable(\"token\", \"invalid-7521-4203-8e59-accesstoken\");"
                     ]
                   }
                 },
                 {
                   "listen": "test",
                   "script": {
-                    "id": "0ff47729-cf3c-48b0-97c2-ce01cfc3deab",
+                    "id": "8693bd25-f43d-4aad-bccb-b38337e9fa31",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD.",
                       "eval(globals.postmanBDD);",
                       "",
                       "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
-                      "after(\"Verify user account credentials\", () => {",
+                      "after(\"Clear test values\", () => {",
                       "    eval(globals.purgeTestValues)();",
                       "});",
                       "",
                       "try{",
-                      "    describe(\"Revoke the access_token(Loggin out)\",function(){",
-                      "        it(\"should return a 204 http status code\",function(){",
-                      "           response.should.have.status(204);",
-                      "           eval(globals.requestAccessAgain)();",
+                      "    describe(\"Service receives an invalid access_token)\",function(){",
+                      "        it(\"should return a 404 http status code\",function(){",
+                      "           response.should.have.status(404);",
                       "        }); ",
-                      "           ",
-                      "        it(\"access token should be empty\", function(){",
-                      "            response.body.should.be.empty;",
-                      "            console.log(\"access_token: \" + environment.access_token);",
-                      "        });",
                       "    });",
                       "} catch(e){",
                       "    console.log(e.error);",
