@@ -3512,6 +3512,12 @@
           "_postman_isSubFolder": true
         }
       ]
+    },
+    {
+      "_postman_id": "353ceffb-bca2-ab39-e31c-54329630bda5",
+      "name": "Catalogs",
+      "description": "",
+      "item": []
     }
   ],
   "event": [
