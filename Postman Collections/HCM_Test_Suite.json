@@ -3645,7 +3645,7 @@
                     }
                   ]
                 },
-                "description": "**Scenario:** Request concepts with the onlyCatchable set it to true.\n\n**Given** a user request only Catchable concepts.<br />\n**and** the requested include a valid access_token<br />\n**when** service receives the request<br />\n**then** service must respond only with those concepts which have it's property isCatchable = true\n**and** a 200 http status code."
+                "description": "**Scenario:** Request concepts with the onlyCatchable set it to true.\n\n**Given** a user request only Catchable concepts.<br />\n**and** the requested include a valid access_token<br />\n**when** service receives the request<br />\n**then** service must respond only with those concepts which have it's property isCatchable = true<br/>\n**and** a 200 http status code."
               },
               "response": []
             }
