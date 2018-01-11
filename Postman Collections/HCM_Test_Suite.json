@@ -1932,7 +1932,7 @@
                     }
                   ]
                 },
-                "description": "**Scenario:** Try to revoke a malformed access token.\n\n**Given** a user wants to end it session<br/>\n**and** service recieves a malformed access_token<br/>\n**when** user send the revoke access_token request<br/>\n**then** a message error must be returned<br/>\n\n<br/>\n> Next access_token value is considered as invalid.\n```json\n{\n  \"access_token\": \"invalid-7521-4203-8e59-accesstoken\",\n}\n```"
+                "description": "**Scenario:** Try to revoke a malformed access token.\n\n**Given** a user wants to end it session<br/>\n**and** service recieves a malformed access_token<br/>\n**when** user send the revoke access_token request<br/>\n**then** a message error must be returned<br/>\n\n<br/>\n> Next access_token value is considered as invalid.\n```json\n{\n  \"access_token\": \"invalid-7521-4203-8e59-accesstoken\"\n}\n```"
               },
               "response": []
             }
