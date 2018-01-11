@@ -1801,14 +1801,14 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "0ff47729-cf3c-48b0-97c2-ce01cfc3deab",
+                    "id": "40adfd7f-20a3-4b53-b897-b2c989f5da71",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD.",
                       "eval(globals.postmanBDD);",
                       "",
                       "// This test case will be an exception, userName and password variables wont be unset in order to call the oauth service on further tests.",
-                      "after(\"Verify user account credentials\", () => {",
+                      "after(\"Clear test values\", () => {",
                       "    eval(globals.purgeTestValues)();",
                       "});",
                       "",
