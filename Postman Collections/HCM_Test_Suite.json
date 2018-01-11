@@ -1932,7 +1932,7 @@
                     }
                   ]
                 },
-                "description": "**Scenario:** Request access token revoke(Loggin out).\n\n**Given** a user wants to end it session<br/>\n**when** user send the revoke access_token request<br/>\n**then** access_token must be cleared<br/>\n**and** service must respond with a 204 status code<br/>\n\n**Example:**<br/>\nAfter access_token revoke, when the following code is called from console, expected result is \"undefined\"\n```javascript\nwindow.sessionStorage[\"hcmAccessToken\"];\n```"
+                "description": "**Scenario:** Try to revoke a malformed access token.\n\n**Given** a user wants to end it session<br/>\n**and** service recieves a malformed access_token\n**when** user send the revoke access_token request<br/>\n**then** a message error must be returned<br/>\n\n**Example:**<br/>\nNext access_token value is considered as invalid.\n```json\n{\n  \"access_token\": \"invalid-7521-4203-8e59-accesstoken\",\n}\n```"
               },
               "response": []
             }
