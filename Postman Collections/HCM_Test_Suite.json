@@ -3214,6 +3214,106 @@
                 "description": "Search information in persons index and type in elastic search"
               },
               "response": []
+            },
+            {
+              "_postman_id": "5160eb3d-2513-a8dc-f3af-91aee6d9770e",
+              "name": "Search_Persons copy",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "id": "f14aa5da-bebe-42c1-8751-aac17a863619",
+                    "type": "text/javascript",
+                    "exec": [
+                      "// Load Postman BDD implementation.",
+                      "eval(globals.postmanBDD);",
+                      "",
+                      "// Execute common tests before feature tests.",
+                      "before('Execute HCM common tests', () => {",
+                      "    eval(globals.commonTests)()",
+                      "});",
+                      "",
+                      "// Clean used variables in order to keep test integrity.",
+                      "after(\"Clear used variables\", () => {",
+                      "    postman.clearEnvironmentVariable(\"sizeForQuery\");",
+                      "});",
+                      "",
+                      "try{",
+                      "    describe(\"Get request to a valid person\", function(){",
+                      "       it(\"Response should match versus person Schema\", function(){",
+                      "            response.body.should.have.schema(globals.elasticSearchPersonSchema);",
+                      "       });",
+                      "       ",
+                      "       it(\"Response should be a 200 http status code\", function(){",
+                      "            response.should.have.status(200);",
+                      "       });",
+                      "       ",
+                      "       it(\"Response must not be lower than specified size of Query\", function(){",
+                      "           let querySize = JSON.parse(response.body).hits.hits.length;",
+                      "           querySize.should.be.at.most(parseInt(pm.environment.get(\"sizeForQuery\")),",
+                      "                                                \"Service is returning more items than specified at query size\");",
+                      "       });",
+                      "    });",
+                      "} catch(e){",
+                      "   console.log(e);",
+                      "   console.log(response);",
+                      "}"
+                    ]
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "a9f977a2-bee8-41d3-a66a-a7588a7e2cbc",
+                    "type": "text/javascript",
+                    "exec": [
+                      "var defaultSizeForQuery = 10; //Default value when execution comes from postman, otherwise value will be taken from data file.",
+                      "postman.setEnvironmentVariable(\"sizeForQuery\", (data.length ? data.personTestData.inexistentPerson.size : defaultSizeForQuery));"
+                    ]
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"_source\": {\r\n    \"include\": [\r\n      \"personId\",\r\n      \"firstName\",\r\n      \"middleName\",\r\n      \"lastName\",\r\n      \"secondLastName\",\r\n      \"taxId\",\r\n      \"curp\",\r\n      \"birthDate\",\r\n      \"isActive\",\r\n      \"employees.employeeId\",\r\n      \"employees.employeeNumber\",\r\n      \"employees.admissionDate\",\r\n      \"employees.employeeAgreements.positionDetails.position\",\r\n      \"employees.employeeAgreements.positionDetails.isPrincipal\",\r\n      \"links\",\r\n      \"employees.employeeAgreements.positionDetails.employeePositionStatus.employeePositionStatusId\",\r\n      \"employees.employeeAgreements.positionDetails.employeePositionStatus.name\"\r\n    ]\r\n  },\r\n  \"size\": {{sizeForQuery}},\r\n  \"query\": {\r\n    \"bool\": {\r\n      \"must\": [\r\n        {\r\n          \"or\": [\r\n            {\r\n              \"terms\": {\r\n                \"employees.employeeAgreements.positionDetails.employeePositionStatus.employeePositionStatusId\": [\r\n                  1\r\n                ]\r\n              }\r\n            },\r\n            {\r\n              \"missing\": {\r\n                \"field\": \"employees\"\r\n              }\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  },\r\n  \"sort\": [\r\n    {\r\n      \"employees.employeeId\": {\r\n        \"missing\": \"_last\",\r\n        \"ignore_unmapped\": true\r\n      }\r\n    }\r\n  ]\r\n}\r\n"
+                },
+                "url": {
+                  "raw": "{{url}}/api/v1/search/persons/persons?pretty=true",
+                  "host": [
+                    "{{url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "search",
+                    "persons",
+                    "persons"
+                  ],
+                  "query": [
+                    {
+                      "key": "pretty",
+                      "value": "true",
+                      "equals": true
+                    }
+                  ]
+                },
+                "description": "Search information in persons index and type in elastic search"
+              },
+              "response": []
             }
           ],
           "_postman_isSubFolder": true
