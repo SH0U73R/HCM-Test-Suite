@@ -3693,7 +3693,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "6ba22392-3b2f-4b3c-a954-cec8cd500ca1",
+                    "id": "80bea03d-124d-4bca-b18b-71e895e36ff3",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD implementation.",
@@ -3705,9 +3705,9 @@
                       "});",
                       "",
                       "try{",
-                      "    describe(\"Get request to a valid person\", function(){",
-                      "       it(\"Response must be unauthorized\", function(){",
-                      "            eval(globals.checkUserSession)();",
+                      "    describe(\"Get request of only catchable captures\", function(){",
+                      "       it(\"Response should contains only captures which property \\\"isCatchable = true\\\"\", function(){",
+                      "            expect(response.body)",
                       "       });",
                       "    });",
                       "} catch(e){",
@@ -3716,17 +3716,30 @@
                       "}"
                     ]
                   }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "id": "ade048c9-1151-4588-a729-2f223ff4125a",
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.environment.set(\"onlyCatchable\", true);"
+                    ]
+                  }
                 }
               ],
               "request": {
                 "auth": {
-                  "type": "noauth"
+                  "type": "bearer",
+                  "bearer": {
+                    "token": "{{access_token}}"
+                  }
                 },
                 "method": "GET",
                 "header": [],
                 "body": {},
                 "url": {
-                  "raw": "{{url}}/api/v1/catalogs/concepts/?onlyCatchable=true",
+                  "raw": "{{url}}/api/v1/catalogs/concepts/?onlyCatchable={{onlyCatchable}}",
                   "host": [
                     "{{url}}"
                   ],
@@ -3740,7 +3753,7 @@
                   "query": [
                     {
                       "key": "onlyCatchable",
-                      "value": "true",
+                      "value": "{{onlyCatchable}}",
                       "equals": true
                     }
                   ]
