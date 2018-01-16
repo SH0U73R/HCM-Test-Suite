@@ -3693,7 +3693,7 @@
                 {
                   "listen": "test",
                   "script": {
-                    "id": "80bea03d-124d-4bca-b18b-71e895e36ff3",
+                    "id": "6ef605a9-8543-499a-8752-e54d465d4512",
                     "type": "text/javascript",
                     "exec": [
                       "// Load Postman BDD implementation.",
@@ -3707,7 +3707,7 @@
                       "try{",
                       "    describe(\"Get request of only catchable captures\", function(){",
                       "       it(\"Response should contains only captures which property \\\"isCatchable = true\\\"\", function(){",
-                      "            expect(response.body)",
+                      "            expect(response.body.some(item => item.isCatchable == false)).to.be.false;",
                       "       });",
                       "    });",
                       "} catch(e){",
