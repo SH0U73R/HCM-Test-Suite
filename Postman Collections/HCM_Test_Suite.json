@@ -3620,7 +3620,7 @@
       "item": [
         {
           "_postman_id": "7afb16c0-5fde-2a89-5945-c5e44dc840b4",
-          "name": "Captures",
+          "name": "Concepts",
           "description": "",
           "item": [
             {
@@ -3761,6 +3761,28 @@
                 "description": "**Scenario:** Request concepts with the onlyCatchable set it to true.\n\n**Given** a user request only Catchable concepts.<br />\n**and** the requested include a valid access_token<br />\n**when** service receives the request<br />\n**then** service must respond only with those concepts which have it's property `isCatchable = true`<br/>\n**and** a 200 http status code."
               },
               "response": []
+            }
+          ],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "4e71b38c-ce6a-43c5-a321-d67196aed1dd",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "c7b73c9d-3b6a-4ac1-94b1-ddb986368b6a",
+                "type": "text/javascript",
+                "exec": [
+                  ""
+                ]
+              }
             }
           ],
           "_postman_isSubFolder": true
