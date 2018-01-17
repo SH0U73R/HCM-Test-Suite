@@ -3711,7 +3711,7 @@
                     {
                       "listen": "test",
                       "script": {
-                        "id": "6ef605a9-8543-499a-8752-e54d465d4512",
+                        "id": "76d48f15-d6ee-4b15-9445-7d1cbe9b30e1",
                         "type": "text/javascript",
                         "exec": [
                           "// Load Postman BDD implementation.",
@@ -3724,8 +3724,8 @@
                           "",
                           "try{",
                           "    describe(\"Get request of only catchable captures\", function(){",
-                          "       it(\"Response should contains only captures which property \\\"isCatchable = true\\\"\", function(){",
-                          "            expect(response.body.some(item => item.isCatchable == false)).to.be.false;",
+                          "       it(\"Response can contains catchable and not catchable captures\", function(){",
+                          "            expect(response.body.length ? true : false).to.be.true;",
                           "       });",
                           "    });",
                           "} catch(e){",
@@ -3738,10 +3738,10 @@
                     {
                       "listen": "prerequest",
                       "script": {
-                        "id": "ade048c9-1151-4588-a729-2f223ff4125a",
+                        "id": "647fd021-d324-4a6b-b42e-54c1b2f71466",
                         "type": "text/javascript",
                         "exec": [
-                          "pm.environment.set(\"onlyCatchable\", true);"
+                          "pm.environment.set(\"onlyCatchable\", false);"
                         ]
                       }
                     }
