@@ -3805,7 +3805,13 @@
                       "      }",
                       "    }",
                       "  }",
-                      "};"
+                      "};",
+                      "",
+                      "describe(\"Get request of only catchable captures\", function(){",
+                      "       it(\"Response should match versus person Schema\", function(){",
+                      "            response.body.should.have.schema(schema);",
+                      "       });",
+                      "});"
                     ]
                   }
                 }
