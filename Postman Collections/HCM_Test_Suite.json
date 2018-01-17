@@ -3703,6 +3703,82 @@
                     "description": "**Scenario:** Request concepts with the onlyCatchable set it to true.\n\n**Given** a user request only Catchable concepts.<br />\n**and** the requested include a valid access_token<br />\n**when** service receives the request<br />\n**then** service must respond only with those concepts which have it's property `isCatchable = true`<br/>\n**and** a 200 http status code."
                   },
                   "response": []
+                },
+                {
+                  "_postman_id": "c92ca686-9b40-ec9d-90f4-0ca1683f6b04",
+                  "name": "Request concepts with the onlyCatchable set it to false",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "id": "6ef605a9-8543-499a-8752-e54d465d4512",
+                        "type": "text/javascript",
+                        "exec": [
+                          "// Load Postman BDD implementation.",
+                          "eval(globals.postmanBDD);",
+                          "",
+                          "// Execute common tests before feature tests.",
+                          "before('Execute HCM common tests', () => {",
+                          "    eval(globals.commonTests)()",
+                          "});",
+                          "",
+                          "try{",
+                          "    describe(\"Get request of only catchable captures\", function(){",
+                          "       it(\"Response should contains only captures which property \\\"isCatchable = true\\\"\", function(){",
+                          "            expect(response.body.some(item => item.isCatchable == false)).to.be.false;",
+                          "       });",
+                          "    });",
+                          "} catch(e){",
+                          "   console.log(e);",
+                          "   console.log(response);",
+                          "}"
+                        ]
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "id": "ade048c9-1151-4588-a729-2f223ff4125a",
+                        "type": "text/javascript",
+                        "exec": [
+                          "pm.environment.set(\"onlyCatchable\", true);"
+                        ]
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "bearer",
+                      "bearer": {
+                        "token": "{{access_token}}"
+                      }
+                    },
+                    "method": "GET",
+                    "header": [],
+                    "body": {},
+                    "url": {
+                      "raw": "{{url}}/api/v1/catalogs/concepts/?onlyCatchable={{onlyCatchable}}",
+                      "host": [
+                        "{{url}}"
+                      ],
+                      "path": [
+                        "api",
+                        "v1",
+                        "catalogs",
+                        "concepts",
+                        ""
+                      ],
+                      "query": [
+                        {
+                          "key": "onlyCatchable",
+                          "value": "{{onlyCatchable}}",
+                          "equals": true
+                        }
+                      ]
+                    },
+                    "description": "**Scenario:** Request concepts with the onlyCatchable set it to true.\n\n**Given** a user request only Catchable concepts.<br />\n**and** the requested include a valid access_token<br />\n**when** service receives the request<br />\n**then** service must respond only with those concepts which have it's property `isCatchable = true`<br/>\n**and** a 200 http status code."
+                  },
+                  "response": []
                 }
               ],
               "event": [
