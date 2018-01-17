@@ -3801,7 +3801,7 @@
                       "// Load Postman BDD implementation.",
                       "eval(globals.postmanBDD);",
                       "",
-                      "var schema = {",
+                      "var concetpSchema = {",
                       "  \"$id\": \"http://example.com/example.json\",",
                       "  \"type\": \"array\",",
                       "  \"definitions\": {},",
@@ -3885,7 +3885,7 @@
                       "",
                       "describe(\"Get request of only catchable captures\", function(){",
                       "       it(\"Response should match versus person Schema\", function(){",
-                      "            response.body.should.have.schema(schema);",
+                      "            response.body.should.have.schema(concetpSchema);",
                       "       });",
                       "});"
                     ]
